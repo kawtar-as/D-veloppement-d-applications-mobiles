@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.kawtar.annexe1"
+    namespace = "com.lyne.annexe1"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -11,7 +11,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.kawtar.annexe1"
+        applicationId = "com.lyne.annexe1"
         minSdk = 28
         targetSdk = 36
         versionCode = 1

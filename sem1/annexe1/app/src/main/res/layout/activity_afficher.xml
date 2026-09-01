@@ -12,11 +12,12 @@
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="0.1"
         android:text="AppMemos" />
 
     <ListView
+        android:id="@+id/listeMemo"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="6" />
+        android:layout_weight="1.5" />
 </LinearLayout>
