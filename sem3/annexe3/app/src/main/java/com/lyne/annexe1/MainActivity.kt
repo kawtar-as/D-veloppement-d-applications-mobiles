@@ -1,9 +1,11 @@
-package com.lyne.annexe1
+package com.kawtar.annexe1
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -51,6 +53,11 @@ class MainActivity : AppCompatActivity() {
         //onQuit.setOnCLickListener {finish()} car le paramètre de la méthode n'est pas utilisé
         //pourquoi il n'y a plus de () ? à cause de la règle du "lambda tailing"
         onQuit.setOnClickListener { finish() }
+        try {
+            SingletonSimple.desserialiserListe(applicationContext)
+        } catch (e: Exception) {
+            Toast.makeText(this,"Bienvenue c'est votre 1ère utilisation",LENGTH_LONG)
+        }
 
     }
     //3e étape

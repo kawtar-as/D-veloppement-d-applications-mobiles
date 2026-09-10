@@ -20,7 +20,7 @@
         tools:layout_editor_absoluteX="-36dp" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/boutonAjouterDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="432dp"
@@ -43,7 +43,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/boutonAjouterMemo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Button"

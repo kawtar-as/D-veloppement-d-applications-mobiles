@@ -8,8 +8,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.lyne.annexe1.Memo
-import com.lyne.annexe1.SingletonSimple
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -30,8 +28,8 @@ class AjouterActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        boutonAjouterMemo = findViewById(R.id.button5)
-        boutonAjouterDate = findViewById(R.id.button4)
+        boutonAjouterMemo = findViewById(R.id.boutonAjouterDate)
+        boutonAjouterDate = findViewById(R.id.boutonAjouterMemo)
         champMemo = findViewById(R.id.editTextText)
         champDate =  findViewById(R.id.textView)
 
@@ -55,5 +53,13 @@ class AjouterActivity : AppCompatActivity() {
             }
             d.show()
         }
+    }
+    override fun onStop(){
+        super.onStop()
+         try{
+             SingletonSimple.serialiserListe(applicationContext)// plutot que this pcqnotre singleton est visible dans toutel'application
+
+         }
+         catch(e: Exception){}
     }
 }
