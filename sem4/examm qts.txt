@@ -1,0 +1,6 @@
+comment on sait si une classe est sérialisable : implements serializable  
+si c'est une classe que c'est nous on code : implementer faut l'écrire dans l'entête de la classe , verifier si les membres le sont aussi , 
+après on fait openfileinput, le buffer :object inputstream or input outputstream
+dans le onstop on serialise
+dans le oncreate on deserialise 
+mode private : pour écrire au début du fichier et écraser les anciennes valeurs 
