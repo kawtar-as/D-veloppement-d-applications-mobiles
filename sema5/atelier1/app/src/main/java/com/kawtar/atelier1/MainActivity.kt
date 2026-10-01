@@ -27,6 +27,13 @@ class MainActivity : AppCompatActivity() {
         val url = "https://www.ericlabonte.com/articles.json"
 
         val stringRequest = StringRequest(Request.Method.GET,url,Repondeur(),RepondeurErreurs())
+
+        //faire la requete sans utiliser des classes internes , utiliser des expressions lambda a la place
+
+        val stringRequest2 = StringRequest(Request.Method.GET,url,{reponse ->  Toast.makeText(this@MainActivity,
+                                            reponse.toString(),
+                                            LENGTH_LONG).show()},
+                                            { Toast.makeText(this@MainActivity, "ne fonctionne pas ", LENGTH_LONG).show()})
         queue.add(stringRequest)
 
     }
