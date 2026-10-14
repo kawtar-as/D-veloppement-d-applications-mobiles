@@ -42,6 +42,11 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.volley)
+    implementation("com.beust:klaxon:5.6")
+
+    implementation ("androidx.media3:media3-exoplayer:1.11.1")
+    implementation ("androidx.media3:media3-ui:1.11.1")
+    implementation ("androidx.media3:media3-common:1.11.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

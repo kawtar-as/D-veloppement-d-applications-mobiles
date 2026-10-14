@@ -1,7 +1,5 @@
 package com.kawtar.tp1
 
-import android.app.DownloadManager
-import android.app.VoiceInteractor
 import android.os.Bundle
 import android.widget.ListView
 import android.widget.SimpleAdapter
@@ -11,14 +9,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.android.volley.Request
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
 import org.json.JSONArray
 
-class AfficherActiviy : AppCompatActivity() {
+class AfficherActiviy : AppCompatActivity() ,Observateur {
     lateinit var liste : ListView
-    var artist = ""
+    lateinit var artist :String
+    lateinit var k :KlaxonModele
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -30,55 +26,61 @@ class AfficherActiviy : AppCompatActivity() {
         }
 
         liste = findViewById(R.id.list)
-        try {
-            var artist = intent.getStringExtra("artist")
-            Toast.makeText(this,"artiste choisi : " + artist.toString(),LENGTH_LONG).show()
-        } catch (e: Exception) {
-            Toast.makeText(this,"problem!!!!",LENGTH_LONG).show()
-        }
+        artist = intent.getStringExtra("artist").toString()
+        Toast.makeText(this,"artiste choisi : " + artist.toString(),LENGTH_LONG).show()
 
-        val queue = Volley.newRequestQueue(this)
+
         var url = ""
         if(artist == "nirvana"){
-            url ="https://itunes.apple.com/search?term=nirvana&media=music"
+            url ="https://itunes.apple.com/search?term=nirvana&media=music&limit=7"
         }else if (artist == "metallica"){
-            url ="https://itunes.apple.com/search?term=metallica&media=music"
+            url ="https://itunes.apple.com/search?term=metallica&media=music&limit=7"
         }else if (artist == "korn"){
-            url ="https://itunes.apple.com/search?term=korn&media=music"
+            url ="https://itunes.apple.com/search?term=korn&media=music&limit=7"
         }
 
-        val jsonRequest = JsonObjectRequest(
-            Request.Method.GET,
-            url,
-            null,
-            {response -> val tab = response.getJSONArray("results")
-                decomposerReponse(tab)},
-            { Toast.makeText(this, "ne marche pas", LENGTH_LONG).show()})
-        queue.add(jsonRequest)
+        k.chercherChanson(this,artist)
+
+
     }
-
-
-
-    fun decomposerReponse(tab: JSONArray){
+    fun decomposerReponse(){
         val remplir = ArrayList<HashMap<String, Any>>()
-        for( i in 0..tab.length()-1){
-            val temp = HashMap<String, Any>()
-            temp.put("trackName", tab.getJSONObject(i).getString("trackName"))
-            temp.put("artistName", tab.getJSONObject(i).getDouble("artistName"))
-            temp.put("previewUrl", tab.getJSONObject(i).getDouble("previewUrl"))
 
-            remplir.add(temp)
-
-        }
-        val adapt = SimpleAdapter(
-            this,
+//        //je fais le tour des éléments du JSONArray pour créer et remplir une Hasmap à la fois
+//        for( i in 0..k.{
+//            val temp = HashMap<String, Any>()
+//            val  chanson = remplir.[i]
+//            temp.put("titre",)
+//            temp.put("artist", tab.getJSONObject(i).getDouble("artistName"))
+//
+//            remplir.add(temp)
+//
+//        }
+        val adapt = SimpleAdapter(this,
             remplir,
             R.layout.item,
-            arrayOf("trackName", "artistName"),
-            intArrayOf(R.id.songName, R.id.nom)
+            arrayOf("titre", "artist"),
+            intArrayOf(R.id.songName, R.id.nomArtist)
         )
 
         liste.adapter = adapt
 
+
     }
+    override fun onStart() {
+        super.onStart()
+        k.ajouterObservateur(this)
+    }
+
+    override fun onStop() {
+        k.retirerObservateur(this)
+
+        super.onStop()
+    }
+
+    override fun actualiser(temperature: ArrayList<Chanson>) {
+        Toast.makeText(this,"allo",LENGTH_LONG).show()
+    }
+
+
 }
