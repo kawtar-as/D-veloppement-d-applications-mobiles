@@ -3,25 +3,26 @@ package com.kawtar.tp1
 import android.content.Context
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
-import com.android.volley.toolbox.Volley
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.beust.klaxon.Klaxon
 
-class KlaxonModele :Sujet{
+object ModeleKlaxon :Sujet{
 
     private val observateurs= ArrayList<Observateur>()
-    private var listeChanson = ArrayList<Chanson>()
+    private var listeChanson: ListeChansons = ListeChansons()
     fun chercherChanson(context: Context, artist :String){
         var lien = artist
-
+        val url = "https://itunes.apple.com/search?term=$artist&media=music&limit=7"
         val queue = Volley.newRequestQueue(context)
 
         val stringRequest = StringRequest(
             Request.Method.GET,
-            lien,
+            url,
             { reponse ->
-                val li: ListeChansons = Klaxon().parse<ListeChansons>(reponse) ?: ListeChansons()
+                listeChanson = Klaxon().parse<ListeChansons>(reponse) ?: ListeChansons()
+                avertirObservateurs()
             },
             { Toast.makeText(context, "Ne fonctionne pas", LENGTH_LONG).show() })
 

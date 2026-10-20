@@ -1,6 +1,8 @@
 package com.kawtar.tp1
 
+import android.content.Context
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.SimpleAdapter
 import android.widget.Toast
@@ -9,12 +11,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
 import org.json.JSONArray
 
 class AfficherActiviy : AppCompatActivity() ,Observateur {
     lateinit var liste : ListView
     lateinit var artist :String
-    lateinit var k :KlaxonModele
+    var k = ModeleKlaxon
+    lateinit var reponse: ArrayList<HashMap<String, Any>>
+    lateinit var adapt: SongAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -38,25 +43,16 @@ class AfficherActiviy : AppCompatActivity() ,Observateur {
         }else if (artist == "korn"){
             url ="https://itunes.apple.com/search?term=korn&media=music&limit=7"
         }
+        reponse = decomposerReponse()
 
         k.chercherChanson(this,artist)
 
 
     }
-    fun decomposerReponse(){
+    fun decomposerReponse(): ArrayList<HashMap<String, Any>> {
         val remplir = ArrayList<HashMap<String, Any>>()
 
-//        //je fais le tour des éléments du JSONArray pour créer et remplir une Hasmap à la fois
-//        for( i in 0..k.{
-//            val temp = HashMap<String, Any>()
-//            val  chanson = remplir.[i]
-//            temp.put("titre",)
-//            temp.put("artist", tab.getJSONObject(i).getDouble("artistName"))
-//
-//            remplir.add(temp)
-//
-//        }
-        val adapt = SimpleAdapter(this,
+        val adapt = SongAdapter(this,
             remplir,
             R.layout.item,
             arrayOf("titre", "artist"),
@@ -64,7 +60,7 @@ class AfficherActiviy : AppCompatActivity() ,Observateur {
         )
 
         liste.adapter = adapt
-
+        return remplir
 
     }
     override fun onStart() {
@@ -78,9 +74,28 @@ class AfficherActiviy : AppCompatActivity() ,Observateur {
         super.onStop()
     }
 
-    override fun actualiser(temperature: ArrayList<Chanson>) {
+
+    override fun actualiser(liste: ListeChansons) {
         Toast.makeText(this,"allo",LENGTH_LONG).show()
+        //transformer la liste de chansons en une liste hashmap
+        for(l in liste.listeChansons){
+            val temp = HashMap<String, Any>()
+            temp.put("titre", l.songName)
+            temp.put("songName",l.songName)
+            temp.put("url",l.url)
+
+            reponse.add(temp)
+
+        }
     }
 
+    inner class SongAdapter(context: Context, data: List<out MutableMap<String, Any>>, resource: Int, from: Array<String>, to: IntArray) : SimpleAdapter(context, data, resource, from, to)  {
+
+        override fun setViewImage(v: ImageView,value:String){
+            Glide.with(v.context)
+                .load(value)
+                .into(v)
+        }
+    }
 
 }
