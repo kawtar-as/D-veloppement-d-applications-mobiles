@@ -11,7 +11,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
-    lateinit var metallica : Button
+    lateinit var limpBizkit : Button
     lateinit var korn : Button
     lateinit var nirvana : Button
 
@@ -26,12 +26,12 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         nirvana = findViewById(R.id.artist1)
-        metallica = findViewById(R.id.artist2)
+        limpBizkit = findViewById(R.id.artist2)
         korn = findViewById(R.id.artist3)
 
         ec = Ecouteur()
         nirvana.setOnClickListener(ec)
-        metallica.setOnClickListener(ec)
+        limpBizkit.setOnClickListener(ec)
         korn.setOnClickListener(ec)
 
 
@@ -41,8 +41,8 @@ class MainActivity : AppCompatActivity() {
             var artist = ""
             if(v == nirvana ){
                 artist = "nirvana"
-            }else if (v == metallica){
-                artist = "metallica"
+            }else if (v == limpBizkit){
+                artist = "limpBizkit"
             }else{
                 artist = "korn"
             }

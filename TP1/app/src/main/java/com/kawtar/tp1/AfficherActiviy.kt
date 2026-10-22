@@ -1,6 +1,7 @@
 package com.kawtar.tp1
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.ListView
@@ -13,12 +14,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import org.json.JSONArray
+import java.lang.System.console
 
 class AfficherActiviy : AppCompatActivity() ,Observateur {
     lateinit var liste : ListView
     lateinit var artist :String
     var k = ModeleKlaxon
-    lateinit var reponse: ArrayList<HashMap<String, Any>>
+
+    var reponse = ArrayList<HashMap<String, Any>>()
     lateinit var adapt: SongAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +33,7 @@ class AfficherActiviy : AppCompatActivity() ,Observateur {
             insets
         }
 
+
         liste = findViewById(R.id.list)
         artist = intent.getStringExtra("artist").toString()
         Toast.makeText(this,"artiste choisi : " + artist.toString(),LENGTH_LONG).show()
@@ -38,34 +42,22 @@ class AfficherActiviy : AppCompatActivity() ,Observateur {
         var url = ""
         if(artist == "nirvana"){
             url ="https://itunes.apple.com/search?term=nirvana&media=music&limit=7"
-        }else if (artist == "metallica"){
-            url ="https://itunes.apple.com/search?term=metallica&media=music&limit=7"
+        }else if (artist == "limpBizkit"){
+            url ="https://itunes.apple.com/search?term=limpBizkit&media=music&limit=7"
         }else if (artist == "korn"){
             url ="https://itunes.apple.com/search?term=korn&media=music&limit=7"
         }
-        reponse = decomposerReponse()
+//        reponse = decomposerReponse()
 
-        k.chercherChanson(this,artist)
+        k.chercherChanson(this,url)
 
-
-    }
-    fun decomposerReponse(): ArrayList<HashMap<String, Any>> {
-        val remplir = ArrayList<HashMap<String, Any>>()
-
-        val adapt = SongAdapter(this,
-            remplir,
-            R.layout.item,
-            arrayOf("titre", "artist"),
-            intArrayOf(R.id.songName, R.id.nomArtist)
-        )
-
-        liste.adapter = adapt
-        return remplir
 
     }
+
     override fun onStart() {
         super.onStart()
         k.ajouterObservateur(this)
+
     }
 
     override fun onStop() {
@@ -75,21 +67,42 @@ class AfficherActiviy : AppCompatActivity() ,Observateur {
     }
 
 
-    override fun actualiser(liste: ListeChansons) {
+    override fun actualiser(listes: ListeChansons) {
+        reponse.clear()
         Toast.makeText(this,"allo",LENGTH_LONG).show()
+
+
         //transformer la liste de chansons en une liste hashmap
-        for(l in liste.listeChansons){
+        for(l in listes.results){
             val temp = HashMap<String, Any>()
-            temp.put("titre", l.songName)
-            temp.put("songName",l.songName)
-            temp.put("url",l.url)
+            temp.put("titre", l.trackName) ?: ""
+            temp.put("artist",l.artistName)?: ""
+            temp.put("url",l.artworkUrl100)?: ""
 
             reponse.add(temp)
+            println("liste" + listes.results.size)
 
         }
+        adapt = SongAdapter(this,
+            reponse,
+            R.layout.item,
+            arrayOf("titre", "artist","url"),
+            intArrayOf(R.id.songName, R.id.nomArtist, R.id.cover)
+            // cliquer sur une chanson de la liste
+
+        )
+
+        liste.adapter = adapt
+        liste.setOnItemClickListener { _, _, position, _ ->
+            Toast.makeText(this, reponse.get(position).get("titre").toString(), LENGTH_LONG).show()
+            val i = Intent(this@AfficherActiviy, LireActivity::class.java)
+            startActivity(i)
+          }
+
+
     }
 
-    inner class SongAdapter(context: Context, data: List<out MutableMap<String, Any>>, resource: Int, from: Array<String>, to: IntArray) : SimpleAdapter(context, data, resource, from, to)  {
+    inner class SongAdapter(context: Context, data: List< MutableMap<String, Any>>, resource: Int, from: Array<String>, to: IntArray) : SimpleAdapter(context, data, resource, from, to)  {
 
         override fun setViewImage(v: ImageView,value:String){
             Glide.with(v.context)

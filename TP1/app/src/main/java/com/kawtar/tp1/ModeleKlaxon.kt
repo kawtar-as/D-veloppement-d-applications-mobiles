@@ -12,9 +12,8 @@ object ModeleKlaxon :Sujet{
 
     private val observateurs= ArrayList<Observateur>()
     private var listeChanson: ListeChansons = ListeChansons()
-    fun chercherChanson(context: Context, artist :String){
-        var lien = artist
-        val url = "https://itunes.apple.com/search?term=$artist&media=music&limit=7"
+    fun chercherChanson(context: Context, url :String){
+        //val url = "https://itunes.apple.com/search?term=$artist&media=music&limit=7"
         val queue = Volley.newRequestQueue(context)
 
         val stringRequest = StringRequest(
