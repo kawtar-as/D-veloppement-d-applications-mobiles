@@ -29,14 +29,35 @@
             android:layout_weight="1"
             android:text="TextView" />
 
-        <androidx.media3.ui.PlayerView
-            android:id="@+id/vue"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="3">
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                tools:srcCompat="@drawable/left" />
+
+            <androidx.media3.ui.PlayerView
+                android:id="@+id/vue"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
 
-        </androidx.media3.ui.PlayerView>
+            </androidx.media3.ui.PlayerView>
+
+            <ImageButton
+                android:id="@+id/imageButton2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                tools:srcCompat="@drawable/right" />
+        </LinearLayout>
 
         <SeekBar
             android:id="@+id/seekBar2"

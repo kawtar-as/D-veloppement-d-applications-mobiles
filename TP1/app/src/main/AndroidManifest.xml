@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tp1">
         <activity
+            android:name=".LireActivity"
+            android:exported="false" />
+        <activity
             android:name=".AfficherActiviy"
             android:exported="false" />
         <activity
