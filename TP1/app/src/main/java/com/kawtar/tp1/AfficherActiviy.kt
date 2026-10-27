@@ -22,6 +22,11 @@ class AfficherActiviy : AppCompatActivity() ,Observateur {
     var k = ModeleKlaxon
 
     var reponse = ArrayList<HashMap<String, Any>>()
+    var url = ""
+    var artists = ArrayList<String>()
+    var titres = ArrayList<String>()
+    var audios = ArrayList<String>()
+    var pochettes = ArrayList<String>()
     lateinit var adapt: SongAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +44,7 @@ class AfficherActiviy : AppCompatActivity() ,Observateur {
         Toast.makeText(this,"artiste choisi : " + artist.toString(),LENGTH_LONG).show()
 
 
-        var url = ""
+
         if(artist == "nirvana"){
             url ="https://itunes.apple.com/search?term=nirvana&media=music&limit=7"
         }else if (artist == "limpBizkit"){
@@ -69,18 +74,29 @@ class AfficherActiviy : AppCompatActivity() ,Observateur {
 
     override fun actualiser(listes: ListeChansons) {
         reponse.clear()
+        titres.clear()
+        artists.clear()
+        audios.clear()
+        pochettes.clear()
         Toast.makeText(this,"allo",LENGTH_LONG).show()
 
 
         //transformer la liste de chansons en une liste hashmap
         for(l in listes.results){
             val temp = HashMap<String, Any>()
-            temp.put("titre", l.trackName) ?: ""
-            temp.put("artist",l.artistName)?: ""
-            temp.put("url",l.artworkUrl100)?: ""
+            temp.put("titre", l.trackName)
+            titres.add(l.trackName)
+
+            temp.put("artist",l.artistName)
+            artists.add(l.artistName)
+
+            temp.put("url",l.artworkUrl100)
+            audios.add(l.previewUrl)
+            pochettes.add(l.artworkUrl100)
+
 
             reponse.add(temp)
-            println("liste" + listes.results.size)
+
 
         }
         adapt = SongAdapter(this,
@@ -93,11 +109,18 @@ class AfficherActiviy : AppCompatActivity() ,Observateur {
         )
 
         liste.adapter = adapt
+
         liste.setOnItemClickListener { _, _, position, _ ->
             Toast.makeText(this, reponse.get(position).get("titre").toString(), LENGTH_LONG).show()
             val i = Intent(this@AfficherActiviy, LireActivity::class.java)
+            i.putStringArrayListExtra("artists",artists )
+            i.putStringArrayListExtra("titres",titres )
+            i.putStringArrayListExtra("audios",audios )
+            i.putStringArrayListExtra("pochettes",pochettes )
+            i.putExtra("position",position)
             startActivity(i)
-          }
+        }
+
 
 
     }

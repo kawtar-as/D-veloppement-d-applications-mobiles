@@ -29,6 +29,13 @@
             android:layout_weight="1"
             android:text="TextView" />
 
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            tools:srcCompat="@tools:sample/avatars" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -40,22 +47,23 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:scaleType="centerInside"
                 tools:srcCompat="@drawable/left" />
 
-            <androidx.media3.ui.PlayerView
-                android:id="@+id/vue"
+            <ImageButton
+                android:id="@+id/play"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-
-            </androidx.media3.ui.PlayerView>
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/play" />
 
             <ImageButton
                 android:id="@+id/imageButton2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:scaleType="centerInside"
                 tools:srcCompat="@drawable/right" />
         </LinearLayout>
 
@@ -64,6 +72,12 @@
             android:layout_width="match_parent"
             android:layout_height="51dp"
             android:layout_gravity="bottom" />
+
+        <TextView
+            android:id="@+id/temps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
