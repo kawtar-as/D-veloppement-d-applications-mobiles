@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.disklrucache.DiskLruCache
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import kotlin.concurrent.timer
 
 class LireActivity : AppCompatActivity() {
     lateinit var vue: ImageView
@@ -39,7 +40,7 @@ class LireActivity : AppCompatActivity() {
     var montimer : MonTimer? = null
     var tempsAffiche : LocalTime = LocalTime.MIDNIGHT
     val format = DateTimeFormatter.ofPattern("mm:ss")
-     b
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -78,19 +79,35 @@ class LireActivity : AppCompatActivity() {
             }
         }
         right.setOnClickListener {
-
+            position --;
             if(player?.hasPreviousMediaItem() == false){
                 Toast.makeText(this,"vous etes rendu a toute premiere chanson",Toast.LENGTH_LONG).show()
-            }else {   player?.seekToPreviousMediaItem()}
+            }else {
+                player?.seekToPreviousMediaItem()
+                titre.setText(titres.get(position))
+                artist.setText(artists.get(position))
+                Glide.with(this)
+                    .load(pochettes[position])
+                    .into(vue)
+
+            }
         }
         left.setOnClickListener {
-
+            position ++
             if(player?.hasNextMediaItem() == false){
                 Toast.makeText(this,"vous etes rendu a toute derniere chanson",Toast.LENGTH_LONG).show()
             }
-            else{player?.seekToNextMediaItem()}
+            else{
+                player?.seekToNextMediaItem()
+                titre.setText(titres.get(position))
+                artist.setText(artists.get(position))
+                Glide.with(this)
+                    .load(pochettes[position])
+                    .into(vue)
+            }
         }
-
+        //var duration = (player?.duration!!/1000)
+        //seekBar.max = duration
 
     }
     override fun onStart() {
@@ -105,6 +122,7 @@ class LireActivity : AppCompatActivity() {
 
         player?.prepare()
         player?.play()
+        montimer?.start()
         titre.setText(titres.get(position))
         artist.setText(artists.get(position))
         Glide.with(this)
@@ -116,10 +134,16 @@ class LireActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         player?.release()
-        player = null
+         player = null
     }
     fun DemarrerTimer() {
-        if (m )
+        montimer?.cancel()
+
+
+
+
+        tempsAffiche
+
 
     }
     inner class MonTimer(duree : Long) :
@@ -130,7 +154,8 @@ class LireActivity : AppCompatActivity() {
         }
 
         override fun onTick(millisUntilFinished: Long) {
-         seekBar.setProgress(millisUntilFinished.toInt())
+            val current: Int = (player?.currentPosition ?: 0) as Int
+            seekBar.setProgress(current)
         }
     }
 }
