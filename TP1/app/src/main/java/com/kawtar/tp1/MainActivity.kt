@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import java.io.ObjectInputStream
 
 class MainActivity : AppCompatActivity() {
     lateinit var limpBizkit : Button
@@ -34,7 +35,24 @@ class MainActivity : AppCompatActivity() {
         limpBizkit.setOnClickListener(ec)
         korn.setOnClickListener(ec)
 
+        try {
+            val fis = openFileInput("fichier.ser")
+            val ois = ObjectInputStream(fis)
 
+            ois.use {
+                val pos = it.readInt()
+                val intent = it.readBoolean()
+                if(intent){
+                    val i = Intent(this,LireActivity::class.java)
+
+
+                    i.putExtra("position", pos)
+                    startActivity(i)
+                    finish()
+                }
+            }
+        }
+        catch (e: Exception){}
     }
     inner class Ecouteur : View.OnClickListener {
         override fun onClick(v: View?) {

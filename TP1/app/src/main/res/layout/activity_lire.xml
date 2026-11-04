@@ -18,12 +18,6 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <androidx.media3.ui.PlayerView
-                android:id="@+id/vue"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
             <TextView
                 android:id="@+id/titre"
                 android:layout_width="0dp"
@@ -31,7 +25,8 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="3"
                 android:gravity="center"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textSize="24sp" />
         </LinearLayout>
 
         <TextView
@@ -40,7 +35,9 @@
             android:layout_height="0dp"
             android:layout_gravity="bottom"
             android:layout_weight="1"
-            android:text="TextView" />
+            android:gravity="center"
+            android:text="TextView"
+            android:textSize="24sp" />
 
         <ImageView
             android:id="@+id/image"
@@ -59,9 +56,19 @@
                 android:id="@+id/imageButton"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:scaleType="centerInside"
-                tools:srcCompat="@drawable/left" />
+                app:srcCompat="@drawable/left" />
+
+            <Button
+                android:id="@+id/moinsdix"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:backgroundTint="#E91E63"
+                android:text="-"
+                android:textSize="12sp" />
 
             <ImageButton
                 android:id="@+id/play"
@@ -71,13 +78,23 @@
                 android:scaleType="centerInside"
                 app:srcCompat="@drawable/play" />
 
+            <Button
+                android:id="@+id/plusdix"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:backgroundTint="#E91E63"
+                android:text="+"
+                android:textSize="12sp" />
+
             <ImageButton
                 android:id="@+id/imageButton2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:scaleType="centerInside"
-                tools:srcCompat="@drawable/right" />
+                app:srcCompat="@drawable/right" />
         </LinearLayout>
 
         <SeekBar
@@ -90,7 +107,7 @@
             android:id="@+id/temps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="00:00" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
