@@ -1,5 +1,6 @@
 package com.kawtar.tp1
-
+// l'ecran principal dse l'application, qui gere l'acceuil, l'identification de 'utilisateur, de la selection de l'artiste
+//pour aller a la deuxieme activité d'une liste des chansons de cet artist
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle

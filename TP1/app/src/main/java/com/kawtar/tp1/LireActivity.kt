@@ -1,5 +1,6 @@
 package com.kawtar.tp1
-
+// Cette classe gère un lecteur audio complet (avec ExoPlayer, listes de lecture,
+// contrôles et gestion du temps) tout en sauvegardant et restaurant automatiquement la position de lecture grâce à la sérialisation.
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -89,6 +90,7 @@ class LireActivity : AppCompatActivity() {
             deserialisation()
         }
         goLink.setOnClickListener {
+            // on p-rens juste l url qui est sauvegarder dans la liste audios
             val i = Intent(Intent.ACTION_VIEW,Uri.parse(audios.get(position)))
             startActivity(i)
         }
@@ -152,7 +154,7 @@ class LireActivity : AppCompatActivity() {
             player?.addMediaItem(mediaItem)
         }
         // écouteur d'événements: STATE_READY veut dire que la chanson est chargée
-        //mettre le maxet demarrer le timer
+        //mettre le max et demarrer le timer
         player?.addListener(object : Player.Listener {
             override fun onPlaybackStateChanged(playbackState: Int) {
                 // STATE_READY signifie que le lecteur a chargé la piste et connaît sa durée
@@ -219,8 +221,6 @@ class LireActivity : AppCompatActivity() {
 
                 val currentPos = player?.currentPosition ?: 0L
                 seekBar.progress = currentPos.toInt()
-                //nbreSeconde +=1000
-                //seekBar.progress = nbreSeconde
 
                 val secondes = currentPos / 1000
             // Transformer les secondes en LocalTime (  24*60*60 )
@@ -246,7 +246,6 @@ class LireActivity : AppCompatActivity() {
 
             }
         } catch (e: Exception) {
-
             position = 0
             print("desserialisation ne marche pas ")
         }

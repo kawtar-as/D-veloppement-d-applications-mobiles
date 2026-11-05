@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.decinfo.annexe8"
+    namespace = "com.lyne.annexe8"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -11,7 +11,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.decinfo.annexe8"
+        applicationId = "com.lyne.annexe8"
         minSdk = 28
         targetSdk = 36
         versionCode = 1
@@ -36,6 +36,8 @@ android {
 }
 
 dependencies {
+    implementation("com.beust:klaxon:5.5")
+    implementation("com.android.volley:volley:1.2.1")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

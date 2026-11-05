@@ -44,7 +44,7 @@ class AfficherActiviy : AppCompatActivity() ,Observateur {
         Toast.makeText(this,"artiste choisi : " + artist.toString(),LENGTH_LONG).show()
 
 
-
+        // choisir l'artiste ert sauvegarder son lien
         if(artist == "nirvana"){
             url ="https://itunes.apple.com/search?term=nirvana&media=music&limit=7"
         }else if (artist == "limpBizkit"){
@@ -75,8 +75,6 @@ class AfficherActiviy : AppCompatActivity() ,Observateur {
         artists.clear()
         audios.clear()
         pochettes.clear()
-        Toast.makeText(this,"allo",LENGTH_LONG).show()
-
 
         //transformer la liste de chansons en une liste hashmap
         for(l in listes.results){
@@ -91,9 +89,7 @@ class AfficherActiviy : AppCompatActivity() ,Observateur {
             audios.add(l.previewUrl)
             pochettes.add(l.artworkUrl100)
 
-
             reponse.add(temp)
-
 
         }
         adapt = SongAdapter(this,

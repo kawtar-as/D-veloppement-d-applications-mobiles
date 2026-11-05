@@ -22,5 +22,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "annexe8"
+rootProject.name = "Annexe8"
 include(":app")
+ 
