@@ -1,5 +1,7 @@
 package com.kawtar.tp1
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.widget.Button
@@ -10,6 +12,10 @@ import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -36,7 +42,7 @@ class LireActivity : AppCompatActivity() {
     lateinit var left: ImageButton
     lateinit var moins10: Button
     lateinit var plus10: Button
-    lateinit var ec: Ecouteur
+    lateinit var goLink :Button
     var player: ExoPlayer? = null
     var artists = ArrayList<String>()
     var titres = ArrayList<String>()
@@ -44,9 +50,10 @@ class LireActivity : AppCompatActivity() {
     var audios = ArrayList<String>()
     var position = 0
     var montimer: MonTimer? = null
-    var nbreSeconde:Int = 0
     var tempsAffiche : LocalTime = LocalTime.MIDNIGHT // l'initialiser a  00:00
     val format = DateTimeFormatter.ofPattern("mm:ss")
+    var tempsSauvegarde: Long = 0L// temps où on a arrêté la chanson pour la serialisation
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,8 +75,7 @@ class LireActivity : AppCompatActivity() {
         left = findViewById(R.id.imageButton2)
         moins10 = findViewById(R.id.moinsdix)
         plus10 = findViewById(R.id.plusdix)
-        ec = Ecouteur()
-
+        goLink = findViewById(R.id.lien)
 
 
         artists = intent.getStringArrayListExtra("artists") ?: ArrayList()
@@ -78,49 +84,52 @@ class LireActivity : AppCompatActivity() {
         audios = intent.getStringArrayListExtra("audios") ?: ArrayList()
         position = intent.getIntExtra("position", 0)
 
-        if (intent.hasExtra("position")) {
-            position = intent.getIntExtra("position", 0)
-        } else {
+        // genre si on l'ouvre depuis mainActivity les audios sont vides
+        if (audios.isEmpty()) {      // lancée sans extras → on restaure la sauvegarde
             deserialisation()
         }
-
-        seekBar.setOnSeekBarChangeListener(ec)
-        play.setOnClickListener {
+        goLink.setOnClickListener {
+            val i = Intent(Intent.ACTION_VIEW,Uri.parse(audios.get(position)))
+            startActivity(i)
+        }
+        play.setOnClickListener { // jouer et arreter la chanson
             if (player?.isPlaying == true) {
                 player?.pause()
             } else {
                 player?.play()
             }
         }
+        // précédent / suivant: on vérifie d'abord s'il reste une chanson avant de changer
+        // sinon on affiche un Toast
         right.setOnClickListener {
-            position--;
-            if (player?.hasPreviousMediaItem() == false) {
-                Toast.makeText(this, "vous etes rendu a toute premiere chanson", Toast.LENGTH_LONG)
-                    .show()
-            } else {
+            if (player?.hasPreviousMediaItem() == true) {
+                position--
                 player?.seekToPreviousMediaItem()
                 titre.setText(titres.get(position))
                 artist.setText(artists.get(position))
                 Glide.with(this)
                     .load(pochettes[position])
                     .into(vue)
-
+            } else {
+                Toast.makeText(this, "Vous êtes à la toute première chanson", Toast.LENGTH_LONG).show()
             }
+
         }
         left.setOnClickListener {
-            position++
-            if (player?.hasNextMediaItem() == false) {
-                Toast.makeText(this, "vous etes rendu a toute derniere chanson", Toast.LENGTH_LONG)
-                    .show()
-            } else {
+
+            if (player?.hasNextMediaItem() == true) {
+                position++
                 player?.seekToNextMediaItem()
                 titre.setText(titres.get(position))
                 artist.setText(artists.get(position))
                 Glide.with(this)
                     .load(pochettes[position])
                     .into(vue)
+            } else {
+                Toast.makeText(this, "Vous êtes à la toute dernière chanson", Toast.LENGTH_LONG).show()
             }
-        }
+
+        }// ajouter et diminuer de 10 s
         plus10.setOnClickListener {
             var pos = player?.currentPosition ?: 0L
             val pos2 = pos + 10000
@@ -134,34 +143,16 @@ class LireActivity : AppCompatActivity() {
 
     }
 
-    inner class Ecouteur : SeekBar.OnSeekBarChangeListener {
-        override fun onProgressChanged(
-            seekBar: SeekBar?,
-            progress: Int,
-            fromUser: Boolean
-        ) {
-            // le temps
-        }
-
-        override fun onStartTrackingTouch(seekBar: SeekBar?) {
-
-        }
-
-        override fun onStopTrackingTouch(seekBar: SeekBar?) {
-            var p = seekBar?.progress
-            player?.seekTo(p?.toLong()!!)
-        }
-    }
-
     override fun onStart() {
         super.onStart()
         player = ExoPlayer.Builder(this).build()
-
+        // ajouter toutes les chansons dans la playlist
         for (l in audios) {
             val mediaItem = MediaItem.fromUri(l)
             player?.addMediaItem(mediaItem)
         }
-
+        // écouteur d'événements: STATE_READY veut dire que la chanson est chargée
+        //mettre le maxet demarrer le timer
         player?.addListener(object : Player.Listener {
             override fun onPlaybackStateChanged(playbackState: Int) {
                 // STATE_READY signifie que le lecteur a chargé la piste et connaît sa durée
@@ -169,14 +160,14 @@ class LireActivity : AppCompatActivity() {
                     val duration = player?.duration ?: 0L
                     if (duration > 0) {
                         seekBar.max = duration.toInt()
-                        DemarrerTimer(duration)
+                        demarrerTimer(duration)
                         temps.setText(duration.toString())
                     }
                 }
             }
         })
-
-        player?.seekTo(position, 0)
+        //se placer  sur la bonne chanson au bon temps
+        player?.seekTo(position, tempsSauvegarde)
         player?.prepare()
         player?.play()
 
@@ -187,39 +178,38 @@ class LireActivity : AppCompatActivity() {
             .load(pochettes[position])
             .into(vue)
 
-//        montimer?.cancel()
-//        var duration = player?.duration
-//        seekBar.max = 30000
-//        DemarrerTimer(30000)
-
 
     }
 
     override fun onStop() {
         super.onStop()
+        tempsSauvegarde = player?.currentPosition ?: 0L
         player?.release()
         player = null
+        //serialisation
+        // (chanson courante, listes et temps) pour reprendre à la réouverture
         try {
 
             var fos = openFileOutput("fichier.ser",MODE_PRIVATE)
             var oos = ObjectOutputStream(fos)
             oos.use{
-                it.writeInt(position)
-                it.writeBoolean(true)
+                oos.writeObject(Sauvegarde(position, artists, titres, audios, pochettes,tempsSauvegarde))
+
             }
         } catch (e: Exception) {
             print("serialisation ne marche pas ")
         }
     }
 
-    fun DemarrerTimer(duree: Long) {
+    fun demarrerTimer(duree: Long) {
         montimer?.cancel()
         montimer = MonTimer(30000,1000)
         montimer?.start()
 
 
     }
-
+    // CountDownTimer: toutes les secondes, on lit la position du player
+    // puis on met à jour la SeekBar et le temps affiché (mm:ss)
     inner class MonTimer(millisInFuture: Long, countDownInterval: Long) :
         CountDownTimer(millisInFuture, countDownInterval) {
         override fun onFinish() {
@@ -239,13 +229,21 @@ class LireActivity : AppCompatActivity() {
 
         }
     }
+    //deserialisation
+    // lit l'objet Sauvegarde du fichier et remet les variables comme elles étaient
     fun deserialisation(){
         try {
             var fis = openFileInput("fichier.ser")
             var ois = ObjectInputStream(fis)
             ois.use{
-                position = it.readInt()
-                val page = it.readBoolean()
+                val objetSauvegarde = ois.readObject() as Sauvegarde
+                position = objetSauvegarde.index
+                artists = objetSauvegarde.artists
+                titres  = objetSauvegarde.titres
+                audios  = objetSauvegarde.audios
+                pochettes = objetSauvegarde.pochettes
+                tempsSauvegarde = objetSauvegarde.tempsMs
+
             }
         } catch (e: Exception) {
 

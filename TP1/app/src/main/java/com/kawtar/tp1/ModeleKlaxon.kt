@@ -19,10 +19,10 @@ object ModeleKlaxon :Sujet{
         val stringRequest = StringRequest(
             Request.Method.GET,
             url,
-            { reponse ->
+            { reponse ->//transformer le txt json en ListeChansons
                 listeChanson = Klaxon().parse<ListeChansons>(reponse) ?: ListeChansons()
                 avertirObservateurs()
-            },
+            },// aapele si la requete echoue
             { Toast.makeText(context, "Ne fonctionne pas", LENGTH_LONG).show() })
 
         queue.add(stringRequest)

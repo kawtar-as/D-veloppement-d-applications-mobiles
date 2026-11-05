@@ -52,10 +52,7 @@ class AfficherActiviy : AppCompatActivity() ,Observateur {
         }else if (artist == "korn"){
             url ="https://itunes.apple.com/search?term=korn&media=music&limit=7"
         }
-//        reponse = decomposerReponse()
-
         k.chercherChanson(this,url)
-
 
     }
 
@@ -109,7 +106,8 @@ class AfficherActiviy : AppCompatActivity() ,Observateur {
         )
 
         liste.adapter = adapt
-
+        // clic sur une chanson: on ouvre LireActivity et on lui envoie les listes
+        // et la position cliquée avec putExtra
         liste.setOnItemClickListener { _, _, position, _ ->
             Toast.makeText(this, reponse.get(position).get("titre").toString(), LENGTH_LONG).show()
             val i = Intent(this@AfficherActiviy, LireActivity::class.java)
@@ -124,7 +122,7 @@ class AfficherActiviy : AppCompatActivity() ,Observateur {
 
 
     }
-
+        //afficher les pochettes avec Glide
     inner class SongAdapter(context: Context, data: List< MutableMap<String, Any>>, resource: Int, from: Array<String>, to: IntArray) : SimpleAdapter(context, data, resource, from, to)  {
 
         override fun setViewImage(v: ImageView,value:String){

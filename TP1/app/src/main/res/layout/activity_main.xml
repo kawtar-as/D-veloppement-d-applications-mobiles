@@ -11,11 +11,12 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="Découverte"
+        android:layout_marginTop="16dp"
+        android:text="Bonjour "
         android:textSize="34sp"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.356"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,10 +24,11 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="136dp"
-        android:text="choisis un artiste pour commencer :"
+        android:layout_marginTop="80dp"
+        android:text="choisis un artiste pour découvrir :"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.464"
+        app:layout_constraintHorizontal_bias="0.167"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,13 +36,13 @@
         android:id="@+id/artist1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="368dp"
+        android:layout_marginTop="316dp"
         android:backgroundTint="#E73149"
         android:text="Nirvana"
         android:textColorLink="#7AA07C"
         app:drawableTint="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.175"
+        app:layout_constraintHorizontal_bias="0.168"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,11 +50,11 @@
         android:id="@+id/artist2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="628dp"
+        android:layout_marginTop="564dp"
         android:backgroundTint="#E73149"
         android:text="Limp Bizkit"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.518"
+        app:layout_constraintHorizontal_bias="0.522"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -60,7 +62,7 @@
         android:id="@+id/artist3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="388dp"
+        android:layout_marginTop="316dp"
         android:backgroundTint="#E73149"
         android:text="Korn"
         android:textColorLink="#7AA07C"
@@ -75,18 +77,18 @@
         android:layout_height="161dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.009"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.335"
+        app:layout_constraintVertical_bias="0.217"
         app:srcCompat="@drawable/nirvana" />
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="203dp"
         android:layout_height="244dp"
-        android:layout_marginTop="152dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="84dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/korn" />
@@ -95,9 +97,21 @@
         android:id="@+id/imageView3"
         android:layout_width="209dp"
         android:layout_height="192dp"
-        android:layout_marginTop="436dp"
+        android:layout_marginTop="364dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/metallica" />
+
+    <Button
+        android:id="@+id/ident"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="44dp"
+        android:backgroundTint="#070707"
+        android:text="Identifiez_vous!"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
